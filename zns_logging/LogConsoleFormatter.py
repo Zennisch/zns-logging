@@ -5,14 +5,6 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-_LEVEL_COLORS = {
-    "DEBUG": Fore.BLUE,
-    "INFO": Fore.GREEN,
-    "WARNING": Fore.YELLOW,
-    "ERROR": Fore.RED,
-    "CRITICAL": Fore.MAGENTA,
-}
-
 class LogConsoleFormatter(logging.Formatter):
     DEFAULT_LEVEL_COLORS = {
         "DEBUG": Fore.BLUE,
