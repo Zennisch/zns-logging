@@ -1,8 +1,7 @@
 import logging
+from typing import Literal
 
 from colorama import init, Fore, Style
-
-from .LogUtility import log_and_raise
 
 init(autoreset=True)
 
@@ -15,22 +14,30 @@ _LEVEL_COLORS = {
 }
 
 class LogConsoleFormatter(logging.Formatter):
+    DEFAULT_LEVEL_COLORS = {
+        "DEBUG": Fore.BLUE,
+        "INFO": Fore.GREEN,
+        "WARNING": Fore.YELLOW,
+        "ERROR": Fore.RED,
+        "CRITICAL": Fore.MAGENTA,
+    }
+
     def __init__(
         self,
-        level_colors: dict[str, str],
-        color_name: str,
-        color_message: str,
-        *args,
+        fmt: str = None,
+        datefmt: str = None,
+        style: Literal["%", "{", "$"] = "{",
+        validate: bool = True,
+        *,
+        color_name: str = Fore.CYAN,
+        color_message: str = Fore.RESET,
+        level_colors: dict[str, str] = None,
         **kwargs,
     ):
-        super().__init__(*args, **kwargs)
-
-        if level_colors and not isinstance(level_colors, dict):
-            log_and_raise(name=__name__, message="[level_colors] must be a dictionary", exception_type=ValueError)
-
-        self.level_colors = level_colors
+        super().__init__(fmt=fmt, datefmt=datefmt, style=style, validate=validate, **kwargs)
         self.color_name = color_name
         self.color_message = color_message
+        self.level_colors = level_colors or self.DEFAULT_LEVEL_COLORS
 
     def format(self, record: logging.LogRecord) -> str:
         record.levelname = f"{self.level_colors.get(record.levelname, Fore.RESET)}{record.levelname:8}{Style.RESET_ALL}"
