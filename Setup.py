@@ -1,10 +1,19 @@
 from setuptools import setup, find_packages
 
+description = "A simple and flexible logging library for Python"
+long_description = open("README.md").read()
+
 setup(
     name="zns_logging",
-    version="1.0.1",
+    version="1.0.2",
+    description="A simple and flexible logging library for Python",
+    long_description=open("README.md").read(),
+    author="Zennisch",
+    author_email="zennisch@gmail.com",
+    url="https://github.com/Zennisch/pypi_zns_logging",
     packages=find_packages(),
     install_requires=[
         "colorama"
     ],
+    python_requires=">=3.10",
 )
