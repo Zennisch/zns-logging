@@ -171,4 +171,4 @@ cython_debug/
 .pypirc
 
 # Other
-Test*.py
+tests/
