@@ -33,3 +33,21 @@ logger.critical("This is a critical message")
 [2025-01-26 23:22:06] [ERROR   ] [__main__]: This is an error message
 [2025-01-26 23:22:06] [CRITICAL] [__main__]: This is a critical message
 ```
+
+# Change Log
+
+## 1.0.0
+Status: Yanked
+Reason: The `colorama` dependency was missing from `install_requires`, causing errors during logger usage.
+
+## 1.0.1
+Status: Released
+Changes: Added `colorama` to `install_requires`.
+
+## 1.0.2
+Status: Released
+Changes: Added description and other metadata to `Setup.py`.
+
+## 1.0.3
+Status: Released
+Changes: Removed unnecessary variables from `Setup.py`.
