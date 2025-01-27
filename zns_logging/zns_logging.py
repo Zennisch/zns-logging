@@ -28,10 +28,12 @@ _LEVEL_COLORS = {
 _ENABLE_FILE_LOGGING = True
 _ENABLE_CONSOLE_LOGGING = True
 
+_ALLOWED_LEVELS = [logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL]
+
 
 def get_logger(
-    logger_name: str,
-    logging_level: int | str = logging.INFO,
+    name: str,
+    level: int | str = logging.INFO,
     date_format_str: str = _DATE_FORMAT_STR,
     file_format_str: str = _FILE_FORMAT_STR,
     file_path: str = None,
@@ -50,8 +52,8 @@ def get_logger(
     Creates and configures a logger with optional file and console handlers.
 
     Args:
-        logger_name (str): The name of the logger.
-        logging_level (int | str): The logging level (e.g., logging.INFO, "DEBUG"). Defaults to logging.INFO.
+        name (str): The name of the logger.
+        level (int | str): The logging level (e.g., logging.INFO, "DEBUG"). Defaults to logging.INFO.
         date_format_str (str): The format string for dates. Defaults to _DATE_FORMAT_STR.
         file_format_str (str): The format string for file log entries. Defaults to _FILE_FORMAT_STR.
         file_path (str): The path to the log file. If None, file logging is disabled. Defaults to None.
@@ -70,16 +72,21 @@ def get_logger(
         logging.Logger: The configured logger.
     """
 
-    if isinstance(logging_level, str):
-        try:
-            logging_level = getattr(logging, logging_level.upper())
-        except AttributeError:
-            log_and_raise(__name__, f"Invalid logging level: {logging_level}", ValueError)
-    elif not isinstance(logging_level, int):
-        log_and_raise(__name__, f"Invalid logging level type: {type(logging_level)}", TypeError)
+    if isinstance(level, str):
+        level = logging.getLevelName(level.upper())
+        if isinstance(level, int):
+            if level not in _ALLOWED_LEVELS:
+                log_and_raise(__name__, f"Logging level not allowed: {logging.getLevelName(level)}", ValueError)
+        else:
+            log_and_raise(__name__, f"Logging level not found: {level}", ValueError)
+    elif isinstance(level, int):
+        if level not in _ALLOWED_LEVELS:
+            log_and_raise(__name__, f"Logging level not allowed: {logging.getLevelName(level)}", ValueError)
+    else:
+        log_and_raise(__name__, f"Logging level type not allowed: {type(level)}", TypeError)
 
-    logger = logging.getLogger(name=logger_name)
-    logger.setLevel(level=logging_level)
+    logger = logging.getLogger(name=name)
+    logger.setLevel(level=level)
 
     if enable_file_logging and file_path:
         file_path = file_path if file_path.endswith(".log") else f"{file_path}.log"
