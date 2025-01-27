@@ -1,8 +1,6 @@
-<h1 style="text-align: center">pypi_zns_logging</h1>
+<h1 align="center">pypi_zns_logging</h1>
 
-<hr style="width: 90%; margin: auto">
-
-<h3 style="text-align: center">A simple and flexible logging library for Python</h3>
+<h3 align="center">A simple and flexible logging library for Python</h3>
 
 # Installation
 
