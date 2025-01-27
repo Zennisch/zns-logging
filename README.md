@@ -37,17 +37,21 @@ logger.critical("This is a critical message")
 # Change Log
 
 ## 1.0.0
-Status: Yanked
-Reason: The `colorama` dependency was missing from `install_requires`, causing errors during logger usage.
+- Status: Yanked
+- Reason: The `colorama` dependency was missing from `install_requires`, causing errors during logger usage.
 
 ## 1.0.1
-Status: Released
-Changes: Added `colorama` to `install_requires`.
+- Status: Released
+- Changes: Added `colorama` to `install_requires`.
 
 ## 1.0.2
-Status: Released
-Changes: Added description and other metadata to `Setup.py`.
+- Status: Released
+- Changes: Added description and other metadata to `Setup.py`.
 
 ## 1.0.3
-Status: Released
-Changes: Removed unnecessary variables from `Setup.py`.
+- Status: Released
+- Changes: Removed unnecessary variables from `Setup.py`.
+
+## 1.0.4
+- Status: Released
+- Changes: Update `zns_logging.py` logic.
