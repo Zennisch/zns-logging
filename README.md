@@ -15,7 +15,7 @@ pip install pypi-zns-logging
 ```python
 from zns_logging import get_logger
 
-logger = get_logger(__name__, logging_level="DEBUG")
+logger = get_logger(__name__, level="DEBUG")
 
 logger.debug("This is a debug message")
 logger.info("This is an info message")
