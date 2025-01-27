@@ -1,4 +1,4 @@
-<h1 align="center">pypi_zns_logging</h1>
+<h1 align="center">zns_logging</h1>
 
 <h3 align="center">A simple and flexible logging library for Python</h3>
 
