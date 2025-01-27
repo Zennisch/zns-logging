@@ -57,3 +57,7 @@ logger.critical("This is a critical message")
 ## 1.0.5
 - Status: Released
 - Changes: Update `README.md`.
+
+## 1.0.6
+- Status: Released
+- Changes: Update `README.md`.
