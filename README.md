@@ -5,7 +5,7 @@
 # Installation
 
 ```bash
-pip install pypi-zns-logging
+pip install zns-logging
 ```
 
 # Usage
