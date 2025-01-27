@@ -1,8 +1,5 @@
 from setuptools import setup, find_packages
 
-description = "A simple and flexible logging library for Python"
-long_description = open("README.md").read()
-
 setup(
     name="zns_logging",
     version="1.0.2",
