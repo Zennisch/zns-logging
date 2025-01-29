@@ -54,10 +54,6 @@ logger.critical("This is a critical message")
 - Status: Released
 - Changes: Update `zns_logging.py` logic.
 
-## 1.0.5
-- Status: Released
-- Changes: Update `README.md`.
-
-## 1.0.6
+## 1.0.5 & 1.0.6 & 1.0.7
 - Status: Released
 - Changes: Update `README.md`.
