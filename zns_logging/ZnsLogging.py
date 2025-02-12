@@ -17,13 +17,6 @@ _FILE_ENCODING = "utf-8"
 _CONSOLE_FORMAT_STR = "[{asctime}] [{levelname}] [{name}]: {message}"
 _COLOR_NAME = Fore.CYAN
 _COLOR_MESSAGE = Fore.RESET
-_LEVEL_COLORS = {
-    "DEBUG": Fore.BLUE,
-    "INFO": Fore.GREEN,
-    "WARNING": Fore.YELLOW,
-    "ERROR": Fore.RED,
-    "CRITICAL": Fore.MAGENTA,
-}
 
 _ENABLE_FILE_LOGGING = True
 _ENABLE_CONSOLE_LOGGING = True
@@ -64,7 +57,7 @@ def get_logger(
         console_format_str (str): The format string for console log entries. Defaults to _CONSOLE_FORMAT_STR.
         console_color_name (str): The color for the logger name in console output. Defaults to Fore.RESET.
         console_color_message (str): The color for the message in console output. Defaults to Fore.RESET.
-        console_level_colors (dict[str, str]): A dictionary mapping log levels to colors for console output. Defaults to _LEVEL_COLORS.
+        console_level_colors (dict[str, str]): A dictionary mapping log levels to colors for console output. Defaults to LogConsoleFormatter.DEFAULT_LEVEL_COLORS.
         enable_file_logging (bool): Whether to enable file logging. Defaults to _ENABLE_FILE_LOGGING.
         enable_console_logging (bool): Whether to enable console logging. Defaults to _ENABLE_CONSOLE_LOGGING.
 
