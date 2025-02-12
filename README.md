@@ -56,6 +56,10 @@ logger.critical("This is a critical message")
 - Changes: Update `zns_logging.py` logic.
 
 1.0.5 & 1.0.6 & 1.0.7
+- Status: Yanked
+- Reason: Unnecessary releases.
+
+1.0.8
 - Status: Released
-- Changes: Update `README.md`.
+- Changes: Rename `zns_logging.py` to `ZnsLogging.py` and update logic.
 ```

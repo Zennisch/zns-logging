@@ -27,6 +27,7 @@ _ALLOWED_LEVELS = [logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, 
 def get_logger(
     name: str,
     level: int | str = logging.INFO,
+    *,
     date_format_str: str = _DATE_FORMAT_STR,
     file_format_str: str = _FILE_FORMAT_STR,
     file_path: str = None,
