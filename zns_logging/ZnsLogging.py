@@ -1,4 +1,5 @@
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 
 from colorama import Fore
@@ -84,6 +85,9 @@ def get_logger(
 
     if enable_file_logging and file_path:
         file_path = file_path if file_path.endswith(".log") else f"{file_path}.log"
+        if not os.path.exists(file_path):
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
         file_handler = RotatingFileHandler(
             filename=file_path,
             mode=file_mode,

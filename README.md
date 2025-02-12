@@ -62,4 +62,8 @@ logger.critical("This is a critical message")
 1.0.8
 - Status: Released
 - Changes: Rename `zns_logging.py` to `ZnsLogging.py` and update logic.
+
+1.0.9
+- Status: Released
+- Changes: Update automatically create log directory.
 ```
