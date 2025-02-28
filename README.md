@@ -70,4 +70,8 @@ logger.critical("This is a critical message")
 1.1.0
 - Status: Released
 - Changes: Change function `get_logger` to class `ZnsLogger`.
+
+1.1.1
+- Status: Released
+- Changes: Remove `ZnsLogging.py`.
 ```
