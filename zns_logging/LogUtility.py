@@ -3,11 +3,11 @@ from typing import Type
 
 
 def log_and_raise(
-        name: str,
-        message: str,
-        exception_type: Type[Exception],
-        logger: logging.Logger = None,
-        error: Exception = None,
+    name: str,
+    message: str,
+    exception_type: Type[Exception],
+    logger: logging.Logger = None,
+    error: Exception = None,
 ) -> None:
     """
     Logs an error message and raises an exception.
