@@ -11,9 +11,9 @@ pip install zns-logging
 # Usage
 
 ```python
-from zns_logging import get_logger
+from zns_logging.ZnsLogger import ZnsLogger
 
-logger = get_logger(__name__, level="DEBUG")
+logger = ZnsLogger(__name__, "DEBUG")
 
 logger.debug("This is a debug message")
 logger.info("This is an info message")
@@ -66,4 +66,8 @@ logger.critical("This is a critical message")
 1.0.9
 - Status: Released
 - Changes: Update automatically create log directory.
+
+1.1.0
+- Status: Released
+- Changes: Change function `get_logger` to class `ZnsLogger`.
 ```

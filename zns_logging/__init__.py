@@ -1,3 +1,3 @@
-from .ZnsLogging import get_logger
+from .ZnsLogger import ZnsLogger
 
-__all__ = ["get_logger"]
+__all__ = ["ZnsLogger"]
