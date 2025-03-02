@@ -1,9 +1,10 @@
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 
 from colorama import Fore
 
-from zns_logging.LogConsoleFormatter import LogConsoleFormatter
+from zns_logging.utility.LogConsoleFormatter import LogConsoleFormatter
 
 _DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
@@ -46,6 +47,8 @@ def _create_file_handler(
     file_format_str: str,
     date_format_str: str,
 ) -> RotatingFileHandler:
+    directory = os.path.dirname(file_path)
+    os.makedirs(directory, exist_ok=True)
     file_handler = RotatingFileHandler(
         filename=file_path,
         mode=file_mode,

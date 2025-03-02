@@ -74,4 +74,10 @@ logger.critical("This is a critical message")
 1.1.1
 - Status: Released
 - Changes: Remove `ZnsLogging.py`.
+
+1.1.2
+- Status: Released
+- Changes:
+    - Update auto create log directory.
+    - `log_and_raise` now does not need to pass the caller's name.
 ```

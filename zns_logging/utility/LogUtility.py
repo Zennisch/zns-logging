@@ -1,12 +1,12 @@
+import inspect
 import logging
 from typing import Type
 
 
 def log_and_raise(
-    name: str,
     message: str,
     exception_type: Type[Exception],
-    logger: logging.Logger = None,
+    logger: logging.Logger,
     error: Exception = None,
 ) -> None:
     """
@@ -23,12 +23,12 @@ def log_and_raise(
     if not issubclass(exception_type, Exception):
         raise TypeError("exception_type must be a subclass of Exception")
 
-    if logger is None:
-        logger = logging.getLogger(__name__)
+    filename = inspect.stack()[1].filename
+    name = inspect.getmodulename(filename)
 
-    logger.error(f"{name}: {message}", exc_info=True)
-
-    raise exception_type(f"{name}: {message}") from error
+    log = f"{message} - Module: [{name}]"
+    logger.error(log)
+    raise exception_type(log) from error
 
 
 __all__ = ["log_and_raise"]
