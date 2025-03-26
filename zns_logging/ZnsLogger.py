@@ -1,27 +1,10 @@
 import inspect
 import logging
-import os
-from logging.handlers import RotatingFileHandler
 from typing import Type
 
-from colorama import Fore
-
-from zns_logging.utility.LogConsoleFormatter import LogConsoleFormatter
-
-_DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
-
-_CONSOLE_FORMAT_STR = "[{asctime}] [{levelname}] [{name}]: {message}"
-_COLOR_NAME = Fore.CYAN
-_COLOR_MESSAGE = Fore.RESET
-
-_FILE_FORMAT_STR = "[%(asctime)s] [%(levelname)-8s] [%(name)s]: %(message)s"
-_FILE_MODE = "a"
-_FILE_MAX_BYTES = 1024 * 1024
-_FILE_BACKUP_COUNT = 4
-_FILE_ENCODING = "utf-8"
-
-_ENABLE_FILE_LOGGING = True
-_ENABLE_CONSOLE_LOGGING = True
+from zns_logging.constant.HandlerConstant import HandlerConstant
+from zns_logging.constant.LoggerConstant import LoggerConstant
+from zns_logging.utility.LogHandlerFactory import LogHandlerFactory
 
 _ALLOWED_LEVELS = [logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL]
 
@@ -40,91 +23,53 @@ def _check_level(level: int | str) -> int:
     return level
 
 
-def _create_console_handler(
-    console_format_str: str,
-    console_color_name: str,
-    console_color_message: str,
-    console_level_colors: dict[str, str],
-) -> logging.StreamHandler:
-    console_handler = logging.StreamHandler()
-    console_formatter = LogConsoleFormatter(
-        console_format_str,
-        datefmt=_DATE_FORMAT_STR,
-        color_name=console_color_name,
-        color_message=console_color_message,
-        level_colors=console_level_colors,
-    )
-    console_handler.setFormatter(console_formatter)
-
-    return console_handler
-
-
-def _create_file_handler(
-    file_path: str,
-    file_mode: str,
-    file_max_bytes: int,
-    file_backup_count: int,
-    file_encoding: str,
-    file_format_str: str,
-    date_format_str: str,
-) -> RotatingFileHandler:
-    directory = os.path.dirname(file_path)
-    os.makedirs(directory, exist_ok=True)
-    file_handler = RotatingFileHandler(
-        filename=file_path,
-        mode=file_mode,
-        maxBytes=file_max_bytes,
-        backupCount=file_backup_count,
-        encoding=file_encoding,
-    )
-    file_formatter = logging.Formatter(file_format_str, datefmt=date_format_str)
-    file_handler.setFormatter(file_formatter)
-
-    return file_handler
-
-
 class ZnsLogger(logging.Logger):
     def __init__(
         self,
         name: str,
         level: int | str = logging.INFO,
         *,
-        date_format_str: str = _DATE_FORMAT_STR,
-        console_format_str: str = _CONSOLE_FORMAT_STR,
-        console_color_name: str = _COLOR_NAME,
-        console_color_message: str = _COLOR_MESSAGE,
-        console_level_colors: dict[str, str] = None,
-        file_format_str: str = _FILE_FORMAT_STR,
-        file_path: str = None,
-        file_mode: str = _FILE_MODE,
-        file_max_bytes: int = _FILE_MAX_BYTES,
-        file_backup_count: int = _FILE_BACKUP_COUNT,
-        file_encoding: str = _FILE_ENCODING,
-        enable_console_logging: bool = _ENABLE_CONSOLE_LOGGING,
-        enable_file_logging: bool = _ENABLE_FILE_LOGGING,
+        console_format_str: str = HandlerConstant.CONSOLE_FORMAT_STR,
+        console_level_colors: dict[str, str] = HandlerConstant.MISSING,
+        console_color_name: str = HandlerConstant.CONSOLE_COLOR_NAME,
+        console_color_message: str = HandlerConstant.CONSOLE_COLOR_MESSAGE,
+        file_path: str = HandlerConstant.MISSING,
+        file_mode: str = HandlerConstant.FILE_MODE,
+        file_max_bytes: int = HandlerConstant.FILE_MAX_BYTES,
+        file_backup_count: int = HandlerConstant.FILE_BACKUP_COUNT,
+        file_encoding: str = HandlerConstant.FILE_ENCODING,
+        file_delay: bool = HandlerConstant.FILE_DELAY,
+        file_errors: str = HandlerConstant.FILE_ERRORS,
+        file_format_str: str = HandlerConstant.FILE_FORMAT_STR,
+        date_format_str: str = HandlerConstant.DATE_FORMAT_STR,
+        enable_console_logging: bool = LoggerConstant.ENABLE_CONSOLE_LOGGING,
+        enable_file_logging: bool = LoggerConstant.ENABLE_FILE_LOGGING,
     ):
         _check_level(level)
 
         super().__init__(name, level)
 
         if enable_console_logging:
-            console_handler = _create_console_handler(
-                console_format_str,
-                console_color_name,
-                console_color_message,
-                console_level_colors,
+            console_handler = LogHandlerFactory.create_console_handler(
+                fmt=console_format_str,
+                datefmt=date_format_str,
+                level_colors=console_level_colors,
+                name_color=console_color_name,
+                msg_color=console_color_message,
             )
             self.addHandler(console_handler)
 
         if enable_file_logging and file_path:
-            file_handler = _create_file_handler(
-                file_path,
-                file_mode,
-                file_max_bytes,
-                file_backup_count,
-                file_encoding,
-                file_format_str,
-                date_format_str,
+            file_handler = LogHandlerFactory.create_file_handler(
+                filename=file_path,
+                mode=file_mode,
+                maxBytes=file_max_bytes,
+                backupCount=file_backup_count,
+                encoding=file_encoding,
+                delay=file_delay,
+                errors=file_errors,
+                fmt=file_format_str,
+                datefmt=date_format_str,
             )
             self.addHandler(file_handler)
 

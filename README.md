@@ -99,4 +99,9 @@ logger.critical("This is a critical message")
     - Swap the order of the StreamHandler and FileHandler in the logger.
     - Integrate the `log_and_raise` function into the `ZnsLogger` class.
     - Fix logic in `LogConsoleFormatter`.
+
+1.1.4
+
+- Status: Released
+- Changes: Create `LogHandlerFactory` class to create log handlers dynamically.
 ```
