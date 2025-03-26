@@ -32,8 +32,22 @@ class LogConsoleFormatter(logging.Formatter):
         self.level_colors = level_colors or self.DEFAULT_LEVEL_COLORS
 
     def format(self, record: logging.LogRecord) -> str:
-        record.levelname = f"{self.level_colors.get(record.levelname, Fore.RESET)}{record.levelname:8}{Style.RESET_ALL}"
-        record.name = f"{self.color_name}{record.name}{Style.RESET_ALL}"
-        record.msg = f"{self.color_message}{record.msg}{Style.RESET_ALL}"
+        level_name = f"{self.level_colors.get(record.levelname, Fore.RESET)}{record.levelname:8}{Style.RESET_ALL}"
+        name = f"{self.color_name}{record.name}{Style.RESET_ALL}"
+        msg = f"{self.color_message}{record.msg}{Style.RESET_ALL}"
 
-        return super().format(record)
+        r = logging.LogRecord(
+            name=name,
+            level=record.levelno,
+            pathname=record.pathname,
+            lineno=record.lineno,
+            msg=msg,
+            args=record.args,
+            exc_info=record.exc_info,
+            func=record.funcName,
+            sinfo=record.stack_info,
+        )
+        r.asctime = self.formatTime(r, self.datefmt)
+        r.levelname = level_name
+
+        return super().format(r)

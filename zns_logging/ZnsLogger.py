@@ -1,6 +1,8 @@
+import inspect
 import logging
 import os
 from logging.handlers import RotatingFileHandler
+from typing import Type
 
 from colorama import Fore
 
@@ -8,15 +10,15 @@ from zns_logging.utility.LogConsoleFormatter import LogConsoleFormatter
 
 _DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
+_CONSOLE_FORMAT_STR = "[{asctime}] [{levelname}] [{name}]: {message}"
+_COLOR_NAME = Fore.CYAN
+_COLOR_MESSAGE = Fore.RESET
+
 _FILE_FORMAT_STR = "[%(asctime)s] [%(levelname)-8s] [%(name)s]: %(message)s"
 _FILE_MODE = "a"
 _FILE_MAX_BYTES = 1024 * 1024
 _FILE_BACKUP_COUNT = 4
 _FILE_ENCODING = "utf-8"
-
-_CONSOLE_FORMAT_STR = "[{asctime}] [{levelname}] [{name}]: {message}"
-_COLOR_NAME = Fore.CYAN
-_COLOR_MESSAGE = Fore.RESET
 
 _ENABLE_FILE_LOGGING = True
 _ENABLE_CONSOLE_LOGGING = True
@@ -36,6 +38,25 @@ def _check_level(level: int | str) -> int:
         raise ValueError(f"Expected one of {_ALLOWED_LEVELS}, got {level}")
 
     return level
+
+
+def _create_console_handler(
+    console_format_str: str,
+    console_color_name: str,
+    console_color_message: str,
+    console_level_colors: dict[str, str],
+) -> logging.StreamHandler:
+    console_handler = logging.StreamHandler()
+    console_formatter = LogConsoleFormatter(
+        console_format_str,
+        datefmt=_DATE_FORMAT_STR,
+        color_name=console_color_name,
+        color_message=console_color_message,
+        level_colors=console_level_colors,
+    )
+    console_handler.setFormatter(console_formatter)
+
+    return console_handler
 
 
 def _create_file_handler(
@@ -62,25 +83,6 @@ def _create_file_handler(
     return file_handler
 
 
-def _create_console_handler(
-    console_format_str: str,
-    console_color_name: str,
-    console_color_message: str,
-    console_level_colors: dict[str, str],
-) -> logging.StreamHandler:
-    console_handler = logging.StreamHandler()
-    console_formatter = LogConsoleFormatter(
-        console_format_str,
-        datefmt=_DATE_FORMAT_STR,
-        color_name=console_color_name,
-        color_message=console_color_message,
-        level_colors=console_level_colors,
-    )
-    console_handler.setFormatter(console_formatter)
-
-    return console_handler
-
-
 class ZnsLogger(logging.Logger):
     def __init__(
         self,
@@ -88,22 +90,31 @@ class ZnsLogger(logging.Logger):
         level: int | str = logging.INFO,
         *,
         date_format_str: str = _DATE_FORMAT_STR,
+        console_format_str: str = _CONSOLE_FORMAT_STR,
+        console_color_name: str = _COLOR_NAME,
+        console_color_message: str = _COLOR_MESSAGE,
+        console_level_colors: dict[str, str] = None,
         file_format_str: str = _FILE_FORMAT_STR,
         file_path: str = None,
         file_mode: str = _FILE_MODE,
         file_max_bytes: int = _FILE_MAX_BYTES,
         file_backup_count: int = _FILE_BACKUP_COUNT,
         file_encoding: str = _FILE_ENCODING,
-        console_format_str: str = _CONSOLE_FORMAT_STR,
-        console_color_name: str = _COLOR_NAME,
-        console_color_message: str = _COLOR_MESSAGE,
-        console_level_colors: dict[str, str] = None,
-        enable_file_logging: bool = _ENABLE_FILE_LOGGING,
         enable_console_logging: bool = _ENABLE_CONSOLE_LOGGING,
+        enable_file_logging: bool = _ENABLE_FILE_LOGGING,
     ):
         _check_level(level)
 
         super().__init__(name, level)
+
+        if enable_console_logging:
+            console_handler = _create_console_handler(
+                console_format_str,
+                console_color_name,
+                console_color_message,
+                console_level_colors,
+            )
+            self.addHandler(console_handler)
 
         if enable_file_logging and file_path:
             file_handler = _create_file_handler(
@@ -117,16 +128,16 @@ class ZnsLogger(logging.Logger):
             )
             self.addHandler(file_handler)
 
-        if enable_console_logging:
-            console_handler = _create_console_handler(
-                console_format_str,
-                console_color_name,
-                console_color_message,
-                console_level_colors,
-            )
-            self.addHandler(console_handler)
-
         self.propagate = False
 
+    def log_and_raise(self, message: str, n: Type[Exception], e: Exception = None) -> None:
+        if not issubclass(n, Exception):
+            raise TypeError("exception_type must be a subclass of Exception")
+
+        file = inspect.stack()[1].filename
+        m = f"{message} - Module: [{file}]"
+
+        self.error(m)
+        raise n(m) from e
 
 __all__ = ["ZnsLogger"]
