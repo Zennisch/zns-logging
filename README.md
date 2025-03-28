@@ -104,4 +104,9 @@ logger.critical("This is a critical message")
 
 - Status: Released
 - Changes: Create `LogHandlerFactory` class to create log handlers dynamically.
+
+1.1.5
+
+- Status: Released
+- Changes: Automatically create log directory if it does not exist.
 ```

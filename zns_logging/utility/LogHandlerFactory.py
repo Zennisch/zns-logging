@@ -1,3 +1,4 @@
+import os
 from logging import StreamHandler, Formatter
 from logging.handlers import RotatingFileHandler
 
@@ -38,6 +39,7 @@ class LogHandlerFactory:
         fmt: str = HandlerConstant.FILE_FORMAT_STR,
         datefmt: str = HandlerConstant.DATE_FORMAT_STR,
     ) -> StreamHandler:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         handler = RotatingFileHandler(
             filename=filename,
             mode=mode,
